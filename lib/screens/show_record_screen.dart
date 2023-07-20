@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ShowRecord extends StatefulWidget {
-  const ShowRecord({super.key});
+  const ShowRecord({super.key, required this.title});
+  final String title;
 
   @override
   State<ShowRecord> createState() => _ShowRecordState();
@@ -27,7 +28,7 @@ class _ShowRecordState extends State<ShowRecord> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Title 1',
+              Text('Title: ${widget.title}',
                   style: TextStyle(
                       fontSize: 20.sp,
                       color: Colors.black,

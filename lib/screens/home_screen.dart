@@ -40,7 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    readRecord();
+    readRecord()!.then((value) {
+      setState(() {});
+    });
   }
 
   @override
@@ -63,14 +65,15 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView.builder(
           itemCount: records.length,
           itemBuilder: ((context, index) {
+            final record = records[index];
             return ListTile(
               onTap: () {
                 print('Record ${index + 1} is clicked');
-                Get.to(() => ShowRecord());
+                Get.to(() => ShowRecord(title: record.title.toString()));
               },
               leading: Icon(Icons.file_copy),
-              title: Text('Title: ${records[index].title}'),
-              subtitle: Text('Description: ${records[index].description}'),
+              title: Text('Title: ${record.title}'),
+              subtitle: Text('Description: ${record.description}'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
