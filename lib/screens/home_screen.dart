@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               leading: Icon(Icons.file_copy),
               title: Text('Title: ${record.title}'),
-              subtitle: Text('Description: ${record.description}'),
+              subtitle: Text('Description: \n${record.description}'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

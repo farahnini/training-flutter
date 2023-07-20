@@ -1,4 +1,5 @@
 import 'package:fgv_data_record/screens/home_screen.dart';
+import 'package:fgv_data_record/services/api_services.dart';
 import 'package:fgv_data_record/utils/check_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -38,12 +42,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(color: Colors.grey, fontSize: 15))),
                 SizedBox(height: screenHeight * 0.05),
                 TextFormField(
+                    controller: emailController,
                     decoration: const InputDecoration(
                         label: Text('Email'),
                         prefixIcon: Icon(Icons.email),
                         border: OutlineInputBorder())),
                 SizedBox(height: screenHeight * 0.01),
                 TextFormField(
+                    controller: passwordController,
                     decoration: const InputDecoration(
                         label: Text('Password'),
                         prefixIcon: Icon(Icons.key),
@@ -52,14 +58,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                     onPressed: () {
                       CheckConnection().checkConnectionState();
-                      Get.to(() => HomeScreen());
+                      // Get.to(() => HomeScreen());
+                      ApiServices().login(emailController.text,
+                          passwordController.text, 'playerId_farah', 'PM45');
                     },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         backgroundColor: Colors.blue),
                     child: const Text('Login',
-                        style: TextStyle(color: Colors.white))),
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 79, 16, 16)))),
                 const Text('or'),
                 SizedBox(height: screenHeight * 0.01),
                 const Text('Login as guest'),
