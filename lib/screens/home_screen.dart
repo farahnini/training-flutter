@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:fgv_data_record/constant.dart';
+import 'package:fgv_data_record/models/record_model.dart';
 import 'package:fgv_data_record/screens/create_record_screen.dart';
 import 'package:fgv_data_record/screens/show_record_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils/global_variables.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +18,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  readRecord() async {
+    final storage = await SharedPreferences.getInstance();
+    final recordsJson = storage.getString('records');
+
+    if (recordsJson != null) {
+      final recordsData = json.decode(recordsJson);
+      records = recordsData
+          .map<RecordModel>((recordData) => RecordModel(
+              id: recordData['id'],
+              title: recordData['title'],
+              description: recordData['description'],
+              imageList: recordData['image_list'],
+              latitude: recordData['latitude'],
+              longitude: recordData['longitude']))
+          .toList();
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    readRecord();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: ListView.builder(
-          itemCount: 3,
+          itemCount: records.length,
           itemBuilder: ((context, index) {
             return ListTile(
               onTap: () {
@@ -39,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Get.to(() => ShowRecord());
               },
               leading: Icon(Icons.file_copy),
-              title: Text('Title ${index + 1}'),
-              subtitle: Text('Description ${index + 1}'),
+              title: Text('Title: ${records[index].title}'),
+              subtitle: Text('Description: ${records[index].description}'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -53,7 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
           })),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => CreateRecordScreen());
+          Get.to(() => CreateRecordScreen())!.then((value) {
+            setState(() {});
+          });
         },
         child: Icon(Icons.add),
         backgroundColor: primaryColor,
