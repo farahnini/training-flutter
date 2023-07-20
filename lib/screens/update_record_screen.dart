@@ -11,16 +11,22 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateRecordScreen extends StatefulWidget {
-  const UpdateRecordScreen({super.key, required this.id});
+  const UpdateRecordScreen(
+      {super.key,
+      required this.id,
+      required this.title,
+      required this.description});
   final String id;
+  final String title;
+  final String description;
 
   @override
   State<UpdateRecordScreen> createState() => _UpdateRecordScreenState();
 }
 
 class _UpdateRecordScreenState extends State<UpdateRecordScreen> {
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   double? currentLongitude;
   double? currentLatitude;
 
@@ -95,7 +101,13 @@ class _UpdateRecordScreenState extends State<UpdateRecordScreen> {
   updateRecord(String title, String desc) async {
     final index = records.indexWhere((record) => record.id == widget.id);
     if (index >= 0) {
-      records[index] = RecordModel(title: title, description: desc);
+      records[index] = RecordModel(
+          id: records[index].id,
+          title: title,
+          description: desc,
+          imageList: records[index].imageList,
+          latitude: records[index].latitude,
+          longitude: records[index].longitude);
     }
     await saveRecord();
   }
@@ -104,6 +116,9 @@ class _UpdateRecordScreenState extends State<UpdateRecordScreen> {
   void initState() {
     super.initState();
     _getCoordinate();
+
+    titleController = TextEditingController(text: widget.title);
+    descriptionController = TextEditingController(text: widget.description);
   }
 
   @override

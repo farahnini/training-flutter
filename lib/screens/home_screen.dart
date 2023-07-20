@@ -37,8 +37,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  saveRecord() async {
+    final storage = await SharedPreferences.getInstance();
+    final recordJson = json.encode(records
+        .map((record) => {
+              'id': record.id,
+              'title': record.title,
+              'description': record.description,
+              'image_list': record.imageList,
+              'latitiude': record.latitude,
+              'longitude': record.longitude,
+            })
+        .toList());
+
+    await storage.setString('records', recordJson);
+  }
+
   deleteRecord(String id) async {
     records.removeWhere((record) => record.id == id);
+    await saveRecord();
   }
 
   @override
@@ -61,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () async {
                 // Refresh data in shared preference
                 final storage = await SharedPreferences.getInstance();
+                storage.clear();
                 final recordData = storage.getString('records');
                 debugPrint('Record from local storage $recordData');
               },
@@ -82,17 +100,25 @@ class _HomeScreenState extends State<HomeScreen> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.delete),
-                  SizedBox(width: 10),
                   InkWell(
                       onTap: () {
-                        Get.to(() =>
-                                UpdateRecordScreen(id: record.id.toString()))!
+                        Get.to(() => UpdateRecordScreen(
+                                  id: record.id.toString(),
+                                  title: record.title.toString(),
+                                  description: record.description.toString(),
+                                ))!
                             .then((value) {
                           setState(() {});
                         });
                       },
                       child: Icon(Icons.edit)),
+                  SizedBox(width: 10),
+                  InkWell(
+                      onTap: () {
+                        deleteRecord(record.id.toString());
+                        setState(() {});
+                      },
+                      child: Icon(Icons.delete)),
                 ],
               ),
             );
