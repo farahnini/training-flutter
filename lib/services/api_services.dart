@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,5 +36,21 @@ class ApiServices {
 
     debugPrint('This is reponse body: $responseBody');
     debugPrint('This is reponse status code: $responseCode');
+
+    if (responseCode == 200) {
+      storage.setString('user_token', responseBody['token']['token']);
+      final userToken = storage.getString('user_token');
+      debugPrint('This is debug token: $userToken');
+      Get.snackbar('Login', 'Successfully login',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    } else if (responseCode == 401) {
+      debugPrint('This is debug token: $responseBody');
+      Get.snackbar('Login', 'Not authorised',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }
