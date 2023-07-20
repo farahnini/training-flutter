@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:fgv_data_record/constant.dart';
+import 'package:fgv_data_record/models/record_model.dart';
+import 'package:fgv_data_record/utils/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateRecordScreen extends StatefulWidget {
   const CreateRecordScreen({super.key});
@@ -13,6 +18,8 @@ class CreateRecordScreen extends StatefulWidget {
 }
 
 class _CreateRecordScreenState extends State<CreateRecordScreen> {
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
   double? currentLongitude;
   double? currentLatitude;
 
@@ -68,6 +75,39 @@ class _CreateRecordScreenState extends State<CreateRecordScreen> {
     }
   }
 
+  // To store the record
+  saveRecord() async {
+    final storage = await SharedPreferences.getInstance();
+    final recordJson = json.encode(records
+        .map((record) => {
+              'id': record.id,
+              'title': record.title,
+              'description': record.description,
+              'image_list': record.imageList,
+              'latitiude': record.latitude,
+              'longitude': record.longitude,
+            })
+        .toList());
+
+    await storage.setString('records', recordJson);
+  }
+
+  // To add record
+  addRecord(
+      String title, String desc, List imgList, double lat, double long) async {
+    final record = RecordModel(
+      id: DateTime.now().toString(),
+      title: title,
+      description: desc,
+      imageList: imgList,
+      latitude: lat,
+      longitude: long,
+    );
+
+    records.add(record);
+    await saveRecord();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -92,12 +132,14 @@ class _CreateRecordScreenState extends State<CreateRecordScreen> {
             child: Column(
               children: [
                 TextFormField(
+                    controller: titleController,
                     decoration: InputDecoration(
-                        label: Text('Record'), border: OutlineInputBorder())),
+                        label: Text('Title'), border: OutlineInputBorder())),
                 SizedBox(
                   height: 2.h,
                 ),
                 TextFormField(
+                    controller: descriptionController,
                     maxLines: null,
                     decoration: InputDecoration(
                         label: Text('Description'),
@@ -150,7 +192,11 @@ class _CreateRecordScreenState extends State<CreateRecordScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            addRecord(titleController.text, descriptionController.text, [],
+                currentLatitude!, currentLongitude!);
+            Get.back();
+          },
           backgroundColor: Colors.green,
           child: Text('Submit', style: TextStyle(color: Colors.white))),
     );
