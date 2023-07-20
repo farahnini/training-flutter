@@ -4,6 +4,7 @@ import 'package:fgv_data_record/constant.dart';
 import 'package:fgv_data_record/models/record_model.dart';
 import 'package:fgv_data_record/screens/create_record_screen.dart';
 import 'package:fgv_data_record/screens/show_record_screen.dart';
+import 'package:fgv_data_record/screens/update_record_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,6 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
               longitude: recordData['longitude']))
           .toList();
     }
+  }
+
+  deleteRecord(String id) async {
+    records.removeWhere((record) => record.id == id);
   }
 
   @override
@@ -79,7 +84,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Icon(Icons.delete),
                   SizedBox(width: 10),
-                  Icon(Icons.edit),
+                  InkWell(
+                      onTap: () {
+                        Get.to(() =>
+                                UpdateRecordScreen(id: record.id.toString()))!
+                            .then((value) {
+                          setState(() {});
+                        });
+                      },
+                      child: Icon(Icons.edit)),
                 ],
               ),
             );
