@@ -1,4 +1,5 @@
 import 'package:fgv_data_record/screens/home_screen.dart';
+import 'package:fgv_data_record/screens/loadingscreen.dart';
 import 'package:fgv_data_record/services/api_services.dart';
 import 'package:fgv_data_record/utils/check_connection.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: screenHeight * 0.01),
                 ElevatedButton(
                     onPressed: () {
-                      CheckConnection().checkConnectionState();
-                      // Get.to(() => HomeScreen());
+                      // CheckConnection().checkConnectionState();
+                      Get.to(() => LoadingScreen());
                       ApiServices().login(emailController.text,
                           passwordController.text, 'playerId_farah', 'PM45');
                     },

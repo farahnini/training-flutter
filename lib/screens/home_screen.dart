@@ -5,6 +5,7 @@ import 'package:fgv_data_record/models/record_model.dart';
 import 'package:fgv_data_record/screens/create_record_screen.dart';
 import 'package:fgv_data_record/screens/show_record_screen.dart';
 import 'package:fgv_data_record/screens/update_record_screen.dart';
+import 'package:fgv_data_record/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('FGV Data Record'),
+        centerTitle: true,
         backgroundColor: primaryColor,
         actions: [
           IconButton(
@@ -84,6 +86,36 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               icon: Icon(Icons.refresh)),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.amber,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Profile'),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: Colors.red),
+              ),
+              onTap: () {
+                Get.dialog(AlertDialog());
+                ApiServices().logout();
+              },
+            ),
+          ],
+        ),
       ),
       body: ListView.builder(
           itemCount: records.length,

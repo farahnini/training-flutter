@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fgv_data_record/screens/loadingscreen.dart';
+import 'package:fgv_data_record/utils/check_connection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,6 +53,35 @@ class ApiServices {
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  logout() async {
+    try {
+      //token
+      final storage = await SharedPreferences.getInstance();
+      final userToken = storage.getString('user_token');
+      //endpoint
+      final endpoint = Uri.parse('$baseUrl/logout');
+      //headers
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $userToken'
+      };
+      //response
+      final response = await http.get(endpoint, headers: headers);
+      // //response body
+      // final responseBody = json.decode(response.body);
+      //response status code
+      final responseCode = response.statusCode;
+      //condition
+      if (responseCode == 200) {
+        storage.remove('user_token');
+        Get.to(() => LoadingScreen());
+      }
+    } catch (e) {
+      debugPrint('Error logout : $e');
+      CheckConnection().checkConnectionState();
     }
   }
 }
