@@ -57,8 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: screenHeight * 0.01),
                 ElevatedButton(
                     onPressed: () {
-                      CheckConnection().checkConnectionState();
-                      // Get.to(() => HomeScreen());
                       ApiServices().login(emailController.text,
                           passwordController.text, 'playerId_farah', 'PM45');
                     },
