@@ -3,6 +3,7 @@ import 'package:fgv_data_record/screens/home_screen.dart';
 import 'package:fgv_data_record/screens/loadingscreen.dart';
 import 'package:fgv_data_record/screens/login_screen.dart';
 import 'package:fgv_data_record/utils/check_connection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,14 +78,59 @@ class ApiServices {
 
       // response status code
       final responseCode = response.statusCode;
+      final responseBody = json.decode(response.body);
 
-      if (responseCode == 200) {
+      if (response.statusCode == 200) {
         storage.remove('user_token');
-        Get.to(() => LoginScreen());
+        Get.offAll(() => LoadingScreen());
+      } else if (response.statusCode == 401) {
+        storage.remove('user_token');
+        Get.offAll(() => LoadingScreen());
+      } else {
+        storage.remove('user_token');
+        Get.offAll(() => LoadingScreen());
       }
+      return responseBody;
     } catch (e) {
       debugPrint('This is error: $e');
       CheckConnection().checkConnectionState();
+    }
+  }
+
+  Future profile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userToken = prefs.getString('user_token');
+      final endpoint = Uri.parse('$baseUrl/profile');
+      final headers = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $userToken'
+      };
+
+      final response = await http.get(
+        endpoint,
+        headers: headers,
+      );
+
+      final responseBody = json.decode(response.body);
+      final responseBodyData = json.decode(response.body)['data'];
+      if (kDebugMode) {
+        print('Status Code profile : ${response.statusCode}');
+        print('profile responsebody : ${responseBodyData}');
+      }
+      if (response.statusCode == 200) {
+        // showSuccessSnackBarApi('Logout', responseBody['message'] ?? '');
+        return responseBodyData;
+      } else if (response.statusCode == 401) {
+        // showErrorSnackBarApi('Profile', responseBody['message']);
+        Get.offAll(() => LoadingScreen());
+      } else {
+        // showErrorSnackBarApi('Profile', responseBody['message']);
+        Get.offAll(() => LoadingScreen());
+      }
+    } catch (e) {
+      debugPrint('Profile Error : $e');
+      // CheckConnection().checkConnectivityState();
     }
   }
 }

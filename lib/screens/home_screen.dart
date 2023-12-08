@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fgv_data_record/constant.dart';
 import 'package:fgv_data_record/models/record_model.dart';
 import 'package:fgv_data_record/screens/create_record_screen.dart';
+import 'package:fgv_data_record/screens/profile.dart';
 import 'package:fgv_data_record/screens/show_record_screen.dart';
 import 'package:fgv_data_record/screens/update_record_screen.dart';
 import 'package:fgv_data_record/services/api_services.dart';
@@ -100,7 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               title: const Text('Profile'),
               onTap: () {
-                // Update the state of the app.
+                Get.to(() => ProfileScreen());
+                // Update the
+                // state of the app.
                 // ...
               },
             ),
@@ -110,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.red),
               ),
               onTap: () {
-                Get.dialog(AlertDialog());
+                // Get.dialog(AlertDialog());
                 ApiServices().logout();
               },
             ),
