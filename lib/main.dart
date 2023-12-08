@@ -1,5 +1,4 @@
 import 'package:fgv_data_record/constant.dart';
-import 'package:fgv_data_record/screens/loadingscreen.dart';
 import 'package:fgv_data_record/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
           useMaterial3: true,
         ),
-        home: LoadingScreen(),
+        home: LoginScreen(),
       );
     });
   }
