@@ -38,12 +38,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       'Error: ${snapshot.error}'); // Show error message if any error occurs
                 } else {
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        snapshot.data['name'].toString(),
+                      Text('Name: '),
+                      Container(
+                        padding: EdgeInsets.all(9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          snapshot.data['name'].toString(),
+                        ),
                       ),
-                      Text(
-                        snapshot.data['email'].toString(),
+                      SizedBox(height: 20),
+                      Text('Email: '),
+                      Container(
+                        padding: EdgeInsets.all(9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          snapshot.data['email'].toString(),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text('Identification Number: '),
+                      Container(
+                        padding: EdgeInsets.all(9),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          snapshot.data['nric'].toString(),
+                        ),
                       ),
                     ],
                   ); // Show data when available
