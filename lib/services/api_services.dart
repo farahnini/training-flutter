@@ -53,7 +53,7 @@ class ApiServices {
       Get.offAll(() => LoadingScreen());
     } else if (responseCode == 401) {
       debugPrint('This is debug token: $responseBody');
-      Get.snackbar('Login', 'Not authorised',
+      Get.snackbar('Eror', 'Something went wrong, Please try later',
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
