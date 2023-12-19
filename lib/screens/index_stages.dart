@@ -1,11 +1,15 @@
+import 'package:fgv_data_record/screens/create_grading_form.dart';
 import 'package:fgv_data_record/services/api_services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class IndexStages extends StatefulWidget {
   final String plantationId;
+  final String plantationName;
   const IndexStages({
     Key? key,
     required this.plantationId,
+    required this.plantationName,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class _IndexStagesState extends State<IndexStages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List of Plantations'),
+        title: const Text('List of Stages'),
         centerTitle: true,
         backgroundColor: Colors.amber,
       ),
@@ -34,7 +38,7 @@ class _IndexStagesState extends State<IndexStages> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Text('This is list of plantations'),
+              Text('This is ${widget.plantationName} Plantation'),
               SizedBox(height: 20),
               FutureBuilder(
                 future: futureStages,
@@ -60,7 +64,12 @@ class _IndexStagesState extends State<IndexStages> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              //BAWA ID STAGES KE GRADING FORM
+                              Get.to(() => GradingForm(
+                                  stagesId:
+                                      snapshot.data[index]['id'].toString()));
+                            },
                             leading:
                                 Icon(Icons.nature_people, color: Colors.amber),
                             title: Text(

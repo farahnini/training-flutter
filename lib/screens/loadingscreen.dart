@@ -1,3 +1,4 @@
+import 'package:fgv_data_record/screens/dashboard.dart';
 import 'package:fgv_data_record/screens/home_screen.dart';
 import 'package:fgv_data_record/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // storage.clear();
     if (userToken != null) {
       //IF USER HAVE TOKEN
-      Get.offAll(() => HomeScreen());
+      Get.offAll(() => Dashboard());
     } else {
       //IF USER DOES NOT HAVE TOKEN NAVIGATE TO LOGIN SCREEN
       Get.offAll(() => LoginScreen());

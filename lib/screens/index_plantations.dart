@@ -60,9 +60,13 @@ class _IndexPlantationsState extends State<IndexPlantations> {
                           ),
                           child: ListTile(
                             onTap: () {
+                              //BAWA ID PLANTATION KE PAGE STAGES
                               Get.to(() => IndexStages(
-                                  plantationId:
-                                      snapshot.data[index]['id'].toString()));
+                                    plantationId:
+                                        snapshot.data[index]['id'].toString(),
+                                    plantationName:
+                                        snapshot.data[index]['name'].toString(),
+                                  ));
                             },
                             leading:
                                 Icon(Icons.nature_people, color: Colors.amber),
