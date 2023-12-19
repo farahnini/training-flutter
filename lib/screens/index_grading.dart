@@ -26,6 +26,12 @@ class _IndexGradingState extends State<IndexGrading> {
         title: const Text('List of Gradings'),
         centerTitle: true,
         backgroundColor: Colors.amber,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         actions: [
           IconButton(
             onPressed: () {
