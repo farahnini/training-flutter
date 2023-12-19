@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fgv_data_record/constant.dart';
 import 'package:fgv_data_record/models/record_model.dart';
 import 'package:fgv_data_record/screens/create_record_screen.dart';
+import 'package:fgv_data_record/screens/index_plantations.dart';
 import 'package:fgv_data_record/screens/profile.dart';
 import 'package:fgv_data_record/screens/show_record_screen.dart';
 import 'package:fgv_data_record/screens/update_record_screen.dart';
@@ -114,7 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onTap: () {
                 // Get.dialog(AlertDialog());
-                ApiServices().logout();
+                // ApiServices().logout();
+              },
+            ),
+            ListTile(
+              title: const Text(
+                'Ladang',
+                style: TextStyle(color: Colors.black),
+              ),
+              onTap: () {
+                Get.to(() => IndexPlantations());
               },
             ),
           ],

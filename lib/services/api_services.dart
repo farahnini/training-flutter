@@ -10,10 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ApiServices {
-  final baseUrl = 'https://staging.ecomplaint.tarsoft.my/api/v1';
+  final baseUrl = 'http://bunctracker.quickcapt.cloud/api';
 
-  login(
-      String email, String password, String playerId, String deviceName) async {
+  login(String email, String password) async {
     // Save token in shared preference
     final storage = await SharedPreferences.getInstance();
     // endpoint
@@ -26,8 +25,6 @@ class ApiServices {
     final body = {
       'email': email,
       'password': password,
-      'player_id': playerId,
-      'device_name': deviceName,
     };
     // request
     final response = await http.post(endpoint, headers: header, body: body);
@@ -43,7 +40,7 @@ class ApiServices {
 
     if (responseCode == 200) {
       storage.setString('user_token',
-          responseBody['token']['token']); // save token in shared preference
+          responseBody['token']); // save token in shared preference
       final userToken =
           storage.getString('user_token'); // get token from shared preference
       debugPrint(
@@ -62,46 +59,120 @@ class ApiServices {
     }
   }
 
-  logout() async {
+  // logout() async {
+  //   try {
+  //     // Save token in shared preference
+  //     final storage = await SharedPreferences.getInstance();
+  //     // endpoint
+  //     final endpoint = Uri.parse('$baseUrl/logout');
+  //     // headers
+  //     final header = {
+  //       'Accept': 'application/json',
+  //       'Authorisation': 'Bearer ${storage.getString('user_token')}'
+  //     };
+  //     // request
+  //     final response = await http.post(endpoint, headers: header);
+
+  //     // response status code
+  //     final responseCode = response.statusCode;
+  //     final responseBody = json.decode(response.body);
+
+  //     if (response.statusCode == 200) {
+  //       storage.remove('user_token');
+  //       Get.offAll(() => LoadingScreen());
+  //     } else if (response.statusCode == 401) {
+  //       storage.remove('user_token');
+  //       Get.offAll(() => LoadingScreen());
+  //     } else {
+  //       storage.remove('user_token');
+  //       Get.offAll(() => LoadingScreen());
+  //     }
+  //     return responseBody;
+  //   } catch (e) {
+  //     debugPrint('This is error: $e');
+  //     CheckConnection().checkConnectionState();
+  //   }
+  // }
+
+  // Future profile() async {
+  //   try {
+  //     final storage = await SharedPreferences.getInstance();
+  //     final userToken = storage.getString('user_token');
+  //     final endpoint = Uri.parse('$baseUrl/profile');
+  //     final headers = {
+  //       'Accept': 'application/json',
+  //       'Authorization': 'Bearer $userToken'
+  //     };
+
+  //     final response = await http.get(
+  //       endpoint,
+  //       headers: headers,
+  //     );
+
+  //     final responseBody = json.decode(response.body);
+  //     final responseBodyData = json.decode(response.body)['data'];
+  //     if (kDebugMode) {
+  //       print('Status Code profile : ${response.statusCode}');
+  //       print('profile responsebody : ${responseBodyData}');
+  //     }
+  //     if (response.statusCode == 200) {
+  //       // showSuccessSnackBarApi('Logout', responseBody['message'] ?? '');
+  //       return responseBodyData;
+  //     } else if (response.statusCode == 401) {
+  //       // showErrorSnackBarApi('Profile', responseBody['message']);
+  //       Get.offAll(() => LoadingScreen());
+  //     } else {
+  //       // showErrorSnackBarApi('Profile', responseBody['message']);
+  //       Get.offAll(() => LoadingScreen());
+  //     }
+  //   } catch (e) {
+  //     debugPrint('Profile Error : $e');
+  //     // CheckConnection().checkConnectivityState();
+  //   }
+  // }
+  Future fetchPlantation() async {
     try {
-      // Save token in shared preference
       final storage = await SharedPreferences.getInstance();
-      // endpoint
-      final endpoint = Uri.parse('$baseUrl/logout');
-      // headers
-      final header = {
+      final userToken = storage.getString('user_token');
+      final endpoint = Uri.parse('$baseUrl/v1/plantations');
+      final headers = {
         'Accept': 'application/json',
-        'Authorisation': 'Bearer ${storage.getString('user_token')}'
+        'Authorization': 'Bearer $userToken'
       };
-      // request
-      final response = await http.post(endpoint, headers: header);
 
-      // response status code
-      final responseCode = response.statusCode;
+      final response = await http.get(
+        endpoint,
+        headers: headers,
+      );
+
       final responseBody = json.decode(response.body);
-
+      final responseBodyData = json.decode(response.body)['data'];
+      if (kDebugMode) {
+        print('Status Code profile : ${response.statusCode}');
+        print('profile responsebody : ${responseBodyData}');
+      }
       if (response.statusCode == 200) {
-        storage.remove('user_token');
-        Get.offAll(() => LoadingScreen());
+        // showSuccessSnackBarApi('Logout', responseBody['message'] ?? '');
+        return responseBodyData;
       } else if (response.statusCode == 401) {
-        storage.remove('user_token');
+        // showErrorSnackBarApi('Profile', responseBody['message']);
         Get.offAll(() => LoadingScreen());
       } else {
-        storage.remove('user_token');
+        // showErrorSnackBarApi('Profile', responseBody['message']);
         Get.offAll(() => LoadingScreen());
       }
-      return responseBody;
     } catch (e) {
-      debugPrint('This is error: $e');
-      CheckConnection().checkConnectionState();
+      debugPrint('Profile Error : $e');
+      // CheckConnection().checkConnectivityState();
     }
   }
 
-  Future profile() async {
+  Future fetchStages(String plantationId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userToken = prefs.getString('user_token');
-      final endpoint = Uri.parse('$baseUrl/profile');
+      final storage = await SharedPreferences.getInstance();
+      final userToken = storage.getString('user_token');
+      final endpoint =
+          Uri.parse('$baseUrl/v1/plantations/$plantationId/stages');
       final headers = {
         'Accept': 'application/json',
         'Authorization': 'Bearer $userToken'

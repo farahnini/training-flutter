@@ -58,8 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: screenHeight * 0.01),
                 ElevatedButton(
                     onPressed: () {
-                      ApiServices().login(emailController.text,
-                          passwordController.text, 'playerId_farah', 'PM45');
+                      ApiServices()
+                          .login(emailController.text, passwordController.text);
                     },
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
